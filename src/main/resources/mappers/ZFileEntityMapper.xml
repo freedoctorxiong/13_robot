@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yscoco.robot.dao.ZFileEntityMapper">
+    <resultMap id="BaseResultMap" type="com.yscoco.robot.entity.ZFileEntity">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <arg column="createTime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="fileName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="fileType" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="fileUrl" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="localPath" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="file_state" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="modify_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+    zfile.id, zfile.createTime, fileName, fileType, fileUrl, localPath, file_state, modify_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from zfile
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from zfile
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.yscoco.robot.entity.ZFileEntity">
+    insert into zfile (id, createTime, fileName, 
+      fileType, fileUrl, localPath, 
+      file_state, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{createtime,jdbcType=TIMESTAMP}, #{filename,jdbcType=VARCHAR}, 
+      #{filetype,jdbcType=VARCHAR}, #{fileurl,jdbcType=VARCHAR}, #{localpath,jdbcType=VARCHAR}, 
+      #{fileState,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.yscoco.robot.entity.ZFileEntity">
+        insert into zfile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createtime != null">
+                createTime,
+            </if>
+            <if test="filename != null">
+                fileName,
+            </if>
+            <if test="filetype != null">
+                fileType,
+            </if>
+            <if test="fileurl != null">
+                fileUrl,
+            </if>
+            <if test="localpath != null">
+                localPath,
+            </if>
+            <if test="fileState != null">
+                file_state,
+            </if>
+            <if test="modifyTime != null">
+                modify_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="filename != null">
+                #{filename,jdbcType=VARCHAR},
+            </if>
+            <if test="filetype != null">
+                #{filetype,jdbcType=VARCHAR},
+            </if>
+            <if test="fileurl != null">
+                #{fileurl,jdbcType=VARCHAR},
+            </if>
+            <if test="localpath != null">
+                #{localpath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileState != null">
+                #{fileState,jdbcType=INTEGER},
+            </if>
+            <if test="modifyTime != null">
+                #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yscoco.robot.entity.ZFileEntity">
+        update zfile
+        <set>
+            <if test="createtime != null">
+                createTime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="filename != null">
+                fileName = #{filename,jdbcType=VARCHAR},
+            </if>
+            <if test="filetype != null">
+                fileType = #{filetype,jdbcType=VARCHAR},
+            </if>
+            <if test="fileurl != null">
+                fileUrl = #{fileurl,jdbcType=VARCHAR},
+            </if>
+            <if test="localpath != null">
+                localPath = #{localpath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileState != null">
+                file_state = #{fileState,jdbcType=INTEGER},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yscoco.robot.entity.ZFileEntity">
+    update zfile
+    set createTime = #{createtime,jdbcType=TIMESTAMP},
+      fileName = #{filename,jdbcType=VARCHAR},
+      fileType = #{filetype,jdbcType=VARCHAR},
+      fileUrl = #{fileurl,jdbcType=VARCHAR},
+      localPath = #{localpath,jdbcType=VARCHAR},
+      file_state = #{fileState,jdbcType=INTEGER},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="selectFileByEntity" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from zfile
+        join zfile_entity on zfile.id = zfile_entity.fileId
+        where entityId = #{entityId,jdbcType=BIGINT}
+        and entity_type = #{entityName,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
