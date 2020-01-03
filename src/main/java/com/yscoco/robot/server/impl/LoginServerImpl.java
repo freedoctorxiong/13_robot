@@ -4,6 +4,8 @@ package com.yscoco.robot.server.impl;
 import com.yscoco.robot.Exception.BizException;
 import com.yscoco.robot.common.result.Code;
 import com.yscoco.robot.common.result.Message;
+import com.yscoco.robot.dao.UserEntityMapper;
+import com.yscoco.robot.entity.UserEntity;
 import com.yscoco.robot.entity.aliyun.BindInfo;
 import com.yscoco.robot.redis.redisUtil.RedisUtil;
 import com.yscoco.robot.server.alisms.AliyunSmsSenderService;
@@ -18,6 +20,9 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+import java.util.Date;
 
 /**
  * @Author: Xiong
@@ -27,6 +32,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class LoginServerImpl implements LoginServer {
 
+    @Autowired
+    private UserEntityMapper userEntityMapper;
 
     private int counts = 10;
     private int totalTime = 300;
@@ -39,6 +46,19 @@ public class LoginServerImpl implements LoginServer {
 
     String total = "total";
 
+
+    @Override
+    public Message register(UserEntity userEntity) {
+
+
+        userEntity.setCreateTime(new Date());
+        userEntity.setPassword(DigestUtils.md5DigestAsHex(userEntity.getPassword().getBytes()));
+        int result = userEntityMapper.insertSelective(userEntity);
+        if (result != 1) {
+            throw new BizException(Code.OPERATION_FAILURE_ERROR);
+        }
+        return Message.success();
+    }
 
     @Override
     public Message sendSms(String mobilPhone) {

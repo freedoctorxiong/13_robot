@@ -69,21 +69,24 @@ public class LoginController {
 
     /**
      * 短信注册用户
-     *
-     * @param userEntity
-     * @param roleType   身份
-     * @param vcode      验证码
-     * @return
-     *//*
+     */
     @ApiOperation(value = "注册", notes = "短信注册用户")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "vcode", value = "验证码", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "roleType", value = "身份", required = true, dataType = "String", paramType = "query")
-    })
     @PostMapping("sms/register")
-    public Message register(@RequestBody UserEntity userEntity, @RequestParam RoleType roleType, @RequestParam String vcode) {
-        return loginServer.register(userEntity, roleType, vcode);
-    }*/
+    public Message register(@RequestBody UserEntity userEntity) {
+        BindInfo bindInfo = new BindInfo();
+        bindInfo.setTellphone(userEntity.getMobilPhone());
+        bindInfo.setCode(userEntity.getVcode());
+
+        if (StringUtils.isBlank(bindInfo.getTellphone()) || StringUtils.isBlank(bindInfo.getCode())) {
+            throw new BizException(Code.NOT_PARAM);
+        }
+        boolean isPhone = RegularCheckUtil.isMobile(bindInfo.getTellphone());
+        if (!isPhone) {
+            throw new BizException(Code.MOBILE_ERROR);
+        }
+        loginServer.checkcode(bindInfo);
+        return loginServer.register(userEntity);
+    }
 
 
     /**
@@ -125,6 +128,22 @@ public class LoginController {
             throw new BizException(Code.NOT_PARAM);
         }
         CustomToken token = new CustomToken(userEntity.getUsername(), userEntity.getPassword());
+        return loginServer.doLogin(token);
+    }
+
+    /**
+     * 手机号密码
+     *
+     * @param userEntity
+     * @return
+     */
+    @ApiOperation(value = "手机号密码", notes = "手机号密码")
+    @RequestMapping(value = "/dophoneLogin", method = RequestMethod.POST)
+    public Message dophoneLogin(@RequestBody UserEntity userEntity) {
+        if (StringUtils.isBlank(userEntity.getMobilPhone()) || StringUtils.isBlank(userEntity.getPassword())) {
+            throw new BizException(Code.NOT_PARAM);
+        }
+        CustomToken token = new CustomToken(userEntity.getMobilPhone(), userEntity.getPassword());
         return loginServer.doLogin(token);
     }
 

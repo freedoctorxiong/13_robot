@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Transient;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,8 +37,14 @@ public class UserEntity implements Serializable {
 
     private String email;
 
+    /**
+     * 角色
+     */
     @Transient
-    private List<RoleEntity> roles; //角色
+    private List<RoleEntity> roles;
+
+    @Transient
+    private String vcode;
 
 
     public UserEntity(Long id, Date createTime, Integer state, Date modifyTime, String mobilPhone, String type, String username, String password, String realName, String email) {

@@ -34,7 +34,7 @@ public class ZFileToEntity {
     private Long fileid;
 
     private String type;
-
+    @ApiModelProperty(hidden = true)
     private Integer state;
 
     private String entityType;

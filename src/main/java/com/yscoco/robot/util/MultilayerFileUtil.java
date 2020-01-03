@@ -12,7 +12,7 @@ public class MultilayerFileUtil {
 
     public static String CreateMultilayerFile(String url) {
         LocalDate time = LocalDate.now();
-        String str = url + "\\" + time + "\\";
+        String str = url  + time + "/";
         File f = new File(str);
         if (!f.exists()) {
             f.mkdirs();

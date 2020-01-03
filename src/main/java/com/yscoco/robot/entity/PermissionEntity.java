@@ -22,6 +22,7 @@ public class PermissionEntity implements Serializable {
     @ApiModelProperty(hidden = true)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
+    @ApiModelProperty(hidden = true)
 
     private Integer state;
     @LastModifiedDate

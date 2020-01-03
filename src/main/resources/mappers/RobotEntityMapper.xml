@@ -25,9 +25,10 @@
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>,floor_name floorName,house_name houseName
         from robot
-        where id = #{id,jdbcType=BIGINT}
+        left join floor on robot.fid=floor.id left join house on floor.hid = house.id
+        where robot.id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from robot

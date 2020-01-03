@@ -3,6 +3,7 @@ package com.yscoco.robot.server.user;
 
 import com.yscoco.robot.Exception.BizException;
 import com.yscoco.robot.common.result.Message;
+import com.yscoco.robot.entity.UserEntity;
 import com.yscoco.robot.entity.aliyun.BindInfo;
 import com.yscoco.robot.shiro.CustomToken;
 
@@ -11,6 +12,8 @@ import com.yscoco.robot.shiro.CustomToken;
  * @Date:     2019/10/11 17:44
  */
 public interface LoginServer {
+
+    Message register(UserEntity userEntity);
 
     /**
      * 发送验证码

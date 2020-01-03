@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -75,7 +76,8 @@ public class UploadFileController {
             zFileEntity.setCreatetime(new Date());
             zFileEntity.setFilename(fileName);
             // zFileEntity.setFiletype();
-            zFileEntity.setFileurl(fileUrl + fileName);
+            LocalDate time = LocalDate.now();
+            zFileEntity.setFileurl(fileUrl + time + "/" + fileName);
             zFileEntity.setLocalpath(filepath + fileName);
             zFileServer.insertSelective(zFileEntity);
             log.info(zFileEntity.getId() + "<<<<<<<<<<<<<<<id");
