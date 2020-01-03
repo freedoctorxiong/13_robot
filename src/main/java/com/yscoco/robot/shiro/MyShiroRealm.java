@@ -94,10 +94,13 @@ public class MyShiroRealm extends AuthorizingRealm {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + String.valueOf(userinfo));
         // 通过userinfo从数据库中查找
         UserEntity userEntity = userServer.findByUserinfo(userinfo);
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + userEntity.toString());
         if (userEntity == null) {
             return null;
         }
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + userEntity.getId());
+        List<RoleEntity> roles = roleServer.findByUserId(userEntity.getId());
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + roles.size());
+        userEntity.setRoles(roles);
 
       /* if (userEntity.getStatus() == 1) {
             throw new LockedAccountException();

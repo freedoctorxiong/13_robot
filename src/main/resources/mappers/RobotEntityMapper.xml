@@ -8,8 +8,8 @@
             <arg column="state" javaType="java.lang.Integer" jdbcType="INTEGER"/>
             <arg column="modify_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
             <arg column="robot_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="longitude" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="latitude" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="longitude" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+            <arg column="latitude" javaType="java.lang.Double" jdbcType="DOUBLE"/>
             <arg column="id_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="device_id" javaType="java.lang.String" jdbcType="VARCHAR"/>
@@ -40,8 +40,8 @@
       device_id, fid, x_coordinate, 
       y_coordinate, type)
     values (#{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{robotName,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
-      #{latitude,jdbcType=VARCHAR}, #{idCode,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{robotName,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, 
+      #{latitude,jdbcType=DOUBLE}, #{idCode,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{deviceId,jdbcType=VARCHAR}, #{fid,jdbcType=BIGINT}, #{xCoordinate,jdbcType=DOUBLE}, 
       #{yCoordinate,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER})
   </insert>
@@ -108,10 +108,10 @@
                 #{robotName,jdbcType=VARCHAR},
             </if>
             <if test="longitude != null">
-                #{longitude,jdbcType=VARCHAR},
+                #{longitude,jdbcType=DOUBLE},
             </if>
             <if test="latitude != null">
-                #{latitude,jdbcType=VARCHAR},
+                #{latitude,jdbcType=DOUBLE},
             </if>
             <if test="idCode != null">
                 #{idCode,jdbcType=VARCHAR},
@@ -152,10 +152,10 @@
                 robot_name = #{robotName,jdbcType=VARCHAR},
             </if>
             <if test="longitude != null">
-                longitude = #{longitude,jdbcType=VARCHAR},
+                longitude = #{longitude,jdbcType=DOUBLE},
             </if>
             <if test="latitude != null">
-                latitude = #{latitude,jdbcType=VARCHAR},
+                latitude = #{latitude,jdbcType=DOUBLE},
             </if>
             <if test="idCode != null">
                 id_code = #{idCode,jdbcType=VARCHAR},
@@ -187,8 +187,8 @@
       state = #{state,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       robot_name = #{robotName,jdbcType=VARCHAR},
-      longitude = #{longitude,jdbcType=VARCHAR},
-      latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
       id_code = #{idCode,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       device_id = #{deviceId,jdbcType=VARCHAR},
@@ -199,6 +199,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+
     <select id="findPageRobot" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>,floor_name floorName,house_name houseName
@@ -206,9 +207,47 @@
         left join floor on robot.fid=floor.id left join house on floor.hid = house.id
         where type = #{type,jdbcType=INTEGER}
         <if test="robotName != null">
-            and robot_name LIKE concat('%',#{robotName},'%')
+            and robot_name LIKE concat('%',#{robotName,jdbcType=VARCHAR},'%')
         </if>
 
     </select>
+    <select id="findAreaRobot" resultMap="BaseResultMap">
+        SELECT<include refid="Base_Column_List"/>,ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{latitude,jdbcType = DOUBLE} * PI() / 180 - latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS( #{latitude,jdbcType = DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{longitude,jdbcType = DOUBLE} * PI() / 180 - longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS distance FROM
+        `robot` where type =1 having distance <![CDATA[<=]]> #{juli,jdbcType=DOUBLE} ORDER BY distance asc
+
+    </select>
+    <select id="findRobotByfid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from robot
+        where fid = #{fid,jdbcType=BIGINT}
+    </select>
+    <select id="findSumRobotByfid" resultType="int">
+          select
+        count(*)
+        from robot
+        where fid = #{fid,jdbcType=BIGINT}
+    </select>
+
 
 </mapper>

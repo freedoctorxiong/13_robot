@@ -1,6 +1,7 @@
 package com.yscoco.robot.server;
 
 import com.yscoco.robot.entity.HouseEntity;
+import com.yscoco.robot.entity.RobotEntity;
 
 import java.util.List;
 
@@ -28,4 +29,13 @@ public interface HouseServer {
      */
     List<HouseEntity> findPageHouse(String houseName);
 
+
+    /**
+     * 通过经纬度查询房屋
+     *
+     * @param longitude
+     * @param latitude
+     * @return
+     */
+    List<HouseEntity> findAreaHouse(double longitude, double latitude, double juli);
 }

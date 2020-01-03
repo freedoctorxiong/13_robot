@@ -17,7 +17,6 @@ import java.util.Date;
 @Getter
 @Setter
 @ApiModel(value = "文件对象实体")
-@EntityListeners(AuditingEntityListener.class)
 public class ZFileToEntity {
 
     private Long id;

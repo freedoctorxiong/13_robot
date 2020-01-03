@@ -2,6 +2,7 @@ package com.yscoco.robot.dao;
 
 import com.yscoco.robot.entity.ZFileEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ZFileEntityMapper {
@@ -24,5 +25,5 @@ public interface ZFileEntityMapper {
      * @param entityName
      * @return
      */
-    ZFileEntity selectFileByEntity(Long entityId, String entityName);
+    ZFileEntity selectFileByEntity(@Param("entityId") Long entityId, @Param("entityName") String entityName);
 }

@@ -26,4 +26,6 @@ public interface RoleEntityMapper {
      * @return 角色列表
      */
     List<RoleEntity> findByUserId(Long userId);
+
+
 }

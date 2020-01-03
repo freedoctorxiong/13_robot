@@ -18,13 +18,11 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @ApiModel(value = "文件实体")
-@EntityListeners(AuditingEntityListener.class)
 public class ZFileEntity {
 
     @ApiModelProperty(hidden = true)
     private Long id;
 
-    @CreatedDate
     @ApiModelProperty(hidden = true)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createtime;
@@ -38,7 +36,6 @@ public class ZFileEntity {
     private String localpath;
     @ApiModelProperty(value = "文件状态")
     private Integer fileState;
-    @LastModifiedDate
     @ApiModelProperty(hidden = true)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date modifyTime;

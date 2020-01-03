@@ -28,7 +28,6 @@ public class HouseController {
 
     @ApiOperation(value = "删除楼栋")
     @PostMapping("deleteHouse")
-    @ResponseBody
     public Message deleteByPrimaryKey(@RequestParam Long id) {
         houseServer.deleteByPrimaryKey(id);
         return Message.success();
@@ -36,7 +35,6 @@ public class HouseController {
 
     @ApiOperation(value = "增加楼栋")
     @PostMapping("insertHouse")
-    @ResponseBody
     public Message insert(@RequestBody HouseEntity houseEntity) {
         log.info(">>>>>>>>>>>>>>>增加楼栋<<<<<<<<<<<<<<<<<<<<<");
         houseServer.insertSelective(houseEntity);
@@ -45,7 +43,6 @@ public class HouseController {
 
     @ApiOperation(value = "修改楼栋")
     @PostMapping("updateHouse")
-    @ResponseBody
     public Message updateByPrimaryKeySelective(@RequestBody HouseEntity houseEntity) {
         log.info(">>>>>>>>>>>>>>>修改楼栋<<<<<<<<<<<<<<<<<<<<<");
         houseServer.updateByPrimaryKeySelective(houseEntity);
@@ -54,7 +51,6 @@ public class HouseController {
 
     @ApiOperation(value = "通过单个id查询楼栋")
     @PostMapping("selectHouse")
-    @ResponseBody
     public Message selectByPrimaryKey(@RequestParam Long id) {
         log.info(">>>>>>>>>>>>>>>通过单个id查询楼栋<<<<<<<<<<<<<<<<<<<<<");
         HouseEntity houseEntity = houseServer.selectByPrimaryKey(id);
@@ -63,7 +59,6 @@ public class HouseController {
 
     @ApiOperation(value = "分页查询楼栋")
     @PostMapping("findPage")
-    @ResponseBody
     public Message findPageHouse(int pageNum, int pageSize, String houseName) {
         log.info(">>>>>>>>>>>>>>>通过单个id查询楼栋<<<<<<<<<<<<<<<<<<<<<");
         PageHelper.startPage(pageNum, pageSize);

@@ -28,6 +28,30 @@ public interface RobotServer {
      *
      * @return
      */
-    List<RobotEntity> findPageRobot(int type,String robotName);
+    List<RobotEntity> findPageRobot(int type, String robotName);
+
+    /**
+     * 通过经纬度查询机器人
+     *
+     * @param longitude
+     * @param latitude
+     * @param juli
+     * @return
+     */
+    List<RobotEntity> findAreaRobot(double longitude, double latitude, double juli);
+
+    /**
+     * 通过楼层查询机器人信息
+     * @param fid
+     * @return
+     */
+    List<RobotEntity> findRobotByfid(Long fid);
+
+    /**
+     * 通过楼层查询机器人数量
+     * @param fid
+     * @return
+     */
+     int findSumRobotByfid(Long fid);
 
 }

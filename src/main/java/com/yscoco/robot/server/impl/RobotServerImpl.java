@@ -78,8 +78,43 @@ public class RobotServerImpl implements RobotServer {
      * @return
      */
     @Override
-    public List<RobotEntity> findPageRobot(int type,String robotName) {
+    public List<RobotEntity> findPageRobot(int type, String robotName) {
 
-        return robotEntityMapper.findPageRobot(type,robotName);
+        return robotEntityMapper.findPageRobot(type, robotName);
+    }
+
+    /**
+     * 通过经纬度查询机器人
+     *
+     * @param longitude
+     * @param latitude
+     * @param juli
+     * @return
+     */
+    @Override
+    public List<RobotEntity> findAreaRobot(double longitude, double latitude, double juli) {
+        return robotEntityMapper.findAreaRobot(longitude, latitude, juli);
+    }
+
+    /**
+     * 通过楼层查询机器人
+     *
+     * @param fid
+     * @return
+     */
+    @Override
+    public List<RobotEntity> findRobotByfid(Long fid) {
+        return robotEntityMapper.findRobotByfid(fid);
+    }
+
+    /**
+     * 通过楼层查询机器人数量
+     *
+     * @param fid
+     * @return
+     */
+    @Override
+    public int findSumRobotByfid(Long fid) {
+        return robotEntityMapper.findSumRobotByfid(fid);
     }
 }

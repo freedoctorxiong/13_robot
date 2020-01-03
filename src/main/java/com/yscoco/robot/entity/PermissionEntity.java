@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 
-@EntityListeners(AuditingEntityListener.class)
 public class PermissionEntity implements Serializable {
     private Long id;
 

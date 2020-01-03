@@ -2,9 +2,20 @@ package com.yscoco.robot.dao;
 
 import com.yscoco.robot.entity.UserEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface UserEntityMapper {
+
+    /**
+     * 分页查询用户信息
+     *
+     * @return
+     */
+    List<UserEntity> findPageUsers(@Param(value = "userName") String userName);
+
     int deleteByPrimaryKey(Long id);
 
     int insert(UserEntity record);

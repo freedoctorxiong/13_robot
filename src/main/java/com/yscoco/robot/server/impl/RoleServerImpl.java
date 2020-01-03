@@ -33,6 +33,17 @@ public class RoleServerImpl implements RoleServer {
         return roleEntityMapper.findByUserId(userId);
     }
 
+    /**
+     * 根据给用户添加角色
+     *
+     * @param userId
+     * @param roleId
+     */
+    @Override
+    public void relateUser(Long userId, Long roleId) {
+
+    }
+
 
     @Override
     public int deleteByPrimaryKey(Long id) {

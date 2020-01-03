@@ -5,6 +5,7 @@ import com.yscoco.robot.common.result.Code;
 import com.yscoco.robot.dao.FloorEntityMapper;
 import com.yscoco.robot.dao.HouseEntityMapper;
 import com.yscoco.robot.entity.HouseEntity;
+import com.yscoco.robot.entity.RobotEntity;
 import com.yscoco.robot.server.FloorServer;
 import com.yscoco.robot.server.HouseServer;
 import lombok.extern.slf4j.Slf4j;
@@ -94,5 +95,18 @@ public class HouseServerImpl implements HouseServer {
             }
         }
         return listHouse;
+    }
+
+    /**
+     * 通过经纬度查询房屋
+     *
+     * @param longitude
+     * @param latitude
+     * @param juli
+     * @return
+     */
+    @Override
+    public List<HouseEntity> findAreaHouse(double longitude, double latitude, double juli) {
+        return houseEntityMapper.findAreaHouse(longitude, latitude, juli);
     }
 }

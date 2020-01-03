@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yscoco.robot.dao.HouseEntityMapper">
     <resultMap id="BaseResultMap" type="com.yscoco.robot.entity.HouseEntity">
         <constructor>
-            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
-            <arg column="house_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="longitude" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="latitude" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="state" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="modify_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <arg column="house_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="longitude" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+            <arg column="latitude" javaType="java.lang.Double" jdbcType="DOUBLE"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="state" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="modify_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
     id, house_name, longitude, latitude, create_time, state, modify_time
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from house
@@ -25,15 +25,15 @@
     delete from house
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.yscoco.robot.entity.HouseEntity">
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.yscoco.robot.entity.HouseEntity">
     insert into house (id, house_name, longitude, 
       latitude, create_time, state, 
       modify_time)
-    values (#{id,jdbcType=BIGINT}, #{houseName,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
-      #{latitude,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{houseName,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, 
+      #{latitude,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+    <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true"
             parameterType="com.yscoco.robot.entity.HouseEntity">
         insert into house
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -67,10 +67,10 @@
                 #{houseName,jdbcType=VARCHAR},
             </if>
             <if test="longitude != null">
-                #{longitude,jdbcType=VARCHAR},
+                #{longitude,jdbcType=DOUBLE},
             </if>
             <if test="latitude != null">
-                #{latitude,jdbcType=VARCHAR},
+                #{latitude,jdbcType=DOUBLE},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
@@ -90,10 +90,10 @@
                 house_name = #{houseName,jdbcType=VARCHAR},
             </if>
             <if test="longitude != null">
-                longitude = #{longitude,jdbcType=VARCHAR},
+                longitude = #{longitude,jdbcType=DOUBLE},
             </if>
             <if test="latitude != null">
-                latitude = #{latitude,jdbcType=VARCHAR},
+                latitude = #{latitude,jdbcType=DOUBLE},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -110,13 +110,14 @@
     <update id="updateByPrimaryKey" parameterType="com.yscoco.robot.entity.HouseEntity">
     update house
     set house_name = #{houseName,jdbcType=VARCHAR},
-      longitude = #{longitude,jdbcType=VARCHAR},
-      latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       state = #{state,jdbcType=INTEGER},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
     <select id="findPageHouse" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -124,5 +125,29 @@
         <if test="houseName != null">
             and house_name LIKE concat('%',#{houseName},'%')
         </if>
+    </select>
+    <select id="findAreaHouse" resultType="com.yscoco.robot.entity.HouseEntity">
+        SELECT<include refid="Base_Column_List"/>,ROUND(
+        6378.138 * 2 * ASIN(
+        SQRT(
+        POW(
+        SIN(
+        (
+        #{latitude,jdbcType = DOUBLE} * PI() / 180 - latitude * PI() / 180
+        ) / 2
+        ),
+        2
+        ) + COS( #{latitude,jdbcType = DOUBLE} * PI() / 180) * COS(latitude * PI() / 180) * POW(
+        SIN(
+        (
+        #{longitude,jdbcType = DOUBLE} * PI() / 180 - longitude * PI() / 180
+        ) / 2
+        ),
+        2
+        )
+        )
+        ) * 1000
+        ) AS distance FROM
+        `house` having distance <![CDATA[<=]]> #{juli,jdbcType=DOUBLE} ORDER BY distance asc;
     </select>
 </mapper>

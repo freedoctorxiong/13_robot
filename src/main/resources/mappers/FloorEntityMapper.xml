@@ -34,7 +34,8 @@
       #{imgWidth,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{hid,jdbcType=BIGINT})
   </insert>
-    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.yscoco.robot.entity.FloorEntity">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.yscoco.robot.entity.FloorEntity">
         insert into floor
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -137,7 +138,7 @@
         select
         <include refid="Base_Column_List"/>
         from floor
-        where hid = #{hid,jdbcType=BIGINT}
+        where hid = #{hid,jdbcType=BIGINT} ORDER BY floor_name ASC
     </select>
 
 

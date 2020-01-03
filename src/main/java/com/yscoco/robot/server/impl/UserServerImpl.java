@@ -3,15 +3,21 @@ package com.yscoco.robot.server.impl;
 
 import com.yscoco.robot.Exception.BizException;
 import com.yscoco.robot.common.result.Code;
+import com.yscoco.robot.dao.RoleEntityMapper;
 import com.yscoco.robot.dao.UserEntityMapper;
+import com.yscoco.robot.dao.UserToRoleEntityMapper;
+import com.yscoco.robot.entity.RoleEntity;
 import com.yscoco.robot.entity.UserEntity;
+import com.yscoco.robot.entity.UserToRoleEntity;
 import com.yscoco.robot.server.user.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: Xiong
@@ -22,6 +28,25 @@ public class UserServerImpl implements UserServer {
 
     @Autowired
     private UserEntityMapper userEntityMapper;
+    @Autowired
+    private RoleEntityMapper roleEntityMapper;
+
+    @Autowired
+    private UserToRoleEntityMapper userToRoleEntityMapper;
+
+    /**
+     * 分页查询用户信息
+     *
+     * @return
+     */
+    @Override
+    public List<UserEntity> findPageUsers(String userName) {
+        List<UserEntity> list = userEntityMapper.findPageUsers(userName);
+        for (UserEntity userEntity : list) {
+            userEntity.setRoles(roleEntityMapper.findByUserId(userEntity.getId()));
+        }
+        return list;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
@@ -44,11 +69,23 @@ public class UserServerImpl implements UserServer {
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public void insertSelective(UserEntity record) {
+    public void insertUser(UserEntity record) {
+        record.setCreateTime(new Date());
+        record.setPassword(DigestUtils.md5DigestAsHex(record.getPassword().getBytes()));
         int result = userEntityMapper.insertSelective(record);
         if (result != 1) {
             throw new BizException(Code.OPERATION_FAILURE_ERROR);
         }
+        if (record.getRoles() != null) {
+            for (RoleEntity roleEntity : record.getRoles()) {
+                UserToRoleEntity userToRoleEntity = new UserToRoleEntity();
+                userToRoleEntity.setUserId(record.getId());
+                userToRoleEntity.setRoleId(roleEntity.getId());
+                userToRoleEntity.setCreateTime(new Date());
+                userToRoleEntityMapper.insertSelective(userToRoleEntity);
+            }
+        }
+
     }
 
     @Override

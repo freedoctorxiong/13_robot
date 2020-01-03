@@ -14,7 +14,7 @@
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-    zfile.id, zfile.createTime, fileName, fileType, fileUrl, localPath, file_state, modify_time
+    zfile.id, zfile.createTime, zfile.fileName, zfile.fileType, zfile.fileUrl, zfile.localPath, zfile.file_state, zfile.modify_time
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select

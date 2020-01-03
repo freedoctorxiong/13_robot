@@ -4,6 +4,7 @@ import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
@@ -27,7 +28,7 @@ public class ConfigInitializer {
             boolean result = configPath.mkdirs();
             System.out.println("创建config目录结果:" + result);
         }
-    //    copyConfigFile(new File(configPath, "medicine.yml"));
+        copyConfigFile(new File(configPath, "robot.yml"));
         copyConfigFile(new File(configPath, "application.properties"));
     }
 
@@ -44,7 +45,7 @@ public class ConfigInitializer {
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         List<Resource> resourceList = new ArrayList<>();
         String userDir = System.getProperty("user.dir");
-         //resourceList.add(new FileSystemResource(userDir + "/config/medicine.yml"));
+      resourceList.add(new FileSystemResource(userDir + "/config/robot.yml"));
         yaml.setResources(resourceList.toArray(new Resource[0]));
         configurer.setProperties(yaml.getObject());
         return configurer;

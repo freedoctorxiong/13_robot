@@ -1,7 +1,6 @@
 package com.yscoco.robot.server.user;
 
 
-
 import com.yscoco.robot.entity.RoleEntity;
 
 import java.util.List;
@@ -30,5 +29,13 @@ public interface RoleServer {
      * @return 角色列表
      */
     List<RoleEntity> findByUserId(Long userId);
+
+    /**
+     * 根据给用户添加角色
+     *
+     * @param userId
+     * @param roleId
+     */
+    void relateUser(Long userId, Long roleId);
 
 }

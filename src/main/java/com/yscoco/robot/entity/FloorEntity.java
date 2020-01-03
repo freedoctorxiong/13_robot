@@ -15,7 +15,6 @@ import java.util.Date;
 
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
 public class FloorEntity {
     private Long id;
 
@@ -27,13 +26,11 @@ public class FloorEntity {
 
     private Long hid;
 
-    @CreatedDate
     @ApiModelProperty(hidden = true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
     @ApiModelProperty(hidden = true)
     private Integer state;
-    @LastModifiedDate
     @ApiModelProperty(hidden = true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date modifyTime;
@@ -42,6 +39,9 @@ public class FloorEntity {
     @Transient
     private Long fileId;
 
+    @Transient
+    @ApiModelProperty(hidden = true)
+    private int sumRobot;
 
 
     public FloorEntity(Long id, String floorName, Double imgHeight, Double imgWidth, Date createTime, Integer state, Date modifyTime, Long hid) {
@@ -55,71 +55,5 @@ public class FloorEntity {
         this.hid = hid;
     }
 
-    public FloorEntity() {
-        super();
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFloorName() {
-        return floorName;
-    }
-
-    public void setFloorName(String floorName) {
-        this.floorName = floorName == null ? null : floorName.trim();
-    }
-
-    public Double getImgHeight() {
-        return imgHeight;
-    }
-
-    public void setImgHeight(Double imgHeight) {
-        this.imgHeight = imgHeight;
-    }
-
-    public Double getImgWidth() {
-        return imgWidth;
-    }
-
-    public void setImgWidth(Double imgWidth) {
-        this.imgWidth = imgWidth;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
-
-    public Long getHid() {
-        return hid;
-    }
-
-    public void setHid(Long hid) {
-        this.hid = hid;
-    }
 }

@@ -39,7 +39,8 @@
       #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.yscoco.robot.entity.UserEntity">
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.yscoco.robot.entity.UserEntity">
         insert into user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -167,5 +168,14 @@
         user
         WHERE mobil_phone = #{userinfo,jdbcType=VARCHAR} or email= #{userinfo,jdbcType=VARCHAR} or username =
         #{userinfo,jdbcType=VARCHAR} LIMIT 1
+    </select>
+    <select id="findPageUsers" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        user where 1=1
+        <if test="userName != null">
+            and username LIKE concat('%',#{userName,jdbcType=VARCHAR},'%')
+        </if>
     </select>
 </mapper>

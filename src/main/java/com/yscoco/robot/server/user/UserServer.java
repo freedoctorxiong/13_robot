@@ -3,17 +3,25 @@ package com.yscoco.robot.server.user;
 
 import com.yscoco.robot.entity.UserEntity;
 
+import java.util.List;
+
 /**
  * @Author: Xiong
  * @Date: 2019/10/30 16:51
  */
 public interface UserServer {
+    /**
+     * 分页查询用户信息
+     *
+     * @return
+     */
+    List<UserEntity> findPageUsers(String userName);
 
     void deleteByPrimaryKey(Long id);
 
     void insert(UserEntity record);
 
-    void insertSelective(UserEntity record);
+    void insertUser(UserEntity record);
 
     UserEntity selectByPrimaryKey(Long id);
 

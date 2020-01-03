@@ -1,19 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yscoco.robot.dao.RoleEntityMapper">
     <resultMap id="BaseResultMap" type="com.yscoco.robot.entity.RoleEntity">
         <constructor>
-            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
-            <arg column="role_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="state" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="modify_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <arg column="role_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="state" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="modify_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-    id, role_name, create_time, state, modify_time
+    role.id, role.role_name, role.create_time, role.state, role.modify_time, role.description
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from role
@@ -23,13 +24,15 @@
     delete from role
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.yscoco.robot.entity.RoleEntity">
+    <insert id="insert" parameterType="com.yscoco.robot.entity.RoleEntity">
     insert into role (id, role_name, create_time, 
-      state, modify_time)
+      state, modify_time, description
+      )
     values (#{id,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{state,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP})
+      #{state,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR}
+      )
   </insert>
-    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.yscoco.robot.entity.RoleEntity">
+    <insert id="insertSelective" parameterType="com.yscoco.robot.entity.RoleEntity">
         insert into role
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -46,6 +49,9 @@
             </if>
             <if test="modifyTime != null">
                 modify_time,
+            </if>
+            <if test="description != null">
+                description,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -64,6 +70,9 @@
             <if test="modifyTime != null">
                 #{modifyTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.yscoco.robot.entity.RoleEntity">
@@ -81,6 +90,9 @@
             <if test="modifyTime != null">
                 modify_time = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -89,13 +101,16 @@
     set role_name = #{roleName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       state = #{state,jdbcType=INTEGER},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
     <select id="findByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         FROM role join user_role on role.id = user_role.role_id
         where user_role.user_id = #{userId,jdbcType=BIGINT}
     </select>
+
 </mapper>
